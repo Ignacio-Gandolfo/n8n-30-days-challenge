@@ -31,3 +31,7 @@ procesos reales y casos de uso concretos.
 - Practicar diseño de automatizaciones claras y reutilizables  
 - Documentar flujos de forma simple  
 
+---
+
+📘 Diccionario de términos: [GLOSSARY.md](./GLOSSARY.md)
+
