@@ -33,5 +33,6 @@ procesos reales y casos de uso concretos.
 
 ---
 
-📘 Diccionario de términos: [GLOSSARY.md](./GLOSSARY.md)
+📘 📘 Diccionario de términos: [Ver diccionario](Glossary.md)
+
 
