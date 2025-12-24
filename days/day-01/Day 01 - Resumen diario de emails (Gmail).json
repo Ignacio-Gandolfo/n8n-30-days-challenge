@@ -1,0 +1,131 @@
+{
+  "name": "Day 01 - Resumen diario de emails (Gmail)",
+  "nodes": [
+    {
+      "parameters": {
+        "triggerTimes": {
+          "item": [
+            {
+              "hour": 20
+            }
+          ]
+        }
+      },
+      "name": "Cada día a las 20:00",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [-480, -448]
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "getAll",
+        "filters": {
+          "labelIds": ["INBOX"]
+        }
+      },
+      "name": "Leer mails Gmail (24h)",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2,
+      "position": [-64, -144]
+    },
+    {
+      "parameters": {
+        "functionCode": "let html = `\\n<h2>Resumen diario de correos</h2>\\n<ul>\\n`;\\n\\nitems.forEach((item) => {\\n  const from = item.json.From || 'Sin remitente';\\n  const subject = item.json.Subject || 'Sin asunto';\\n  const snippet = item.json.snippet || '';\\n\\n  html += `\\n    <li>\\n      <p><strong>De:</strong> ${from}</p>\\n      <p><strong>Asunto:</strong> ${subject}</p>\\n      <p><em>${snippet}</em></p>\\n    </li>\\n    <hr>\\n  `;\\n});\\n\\nhtml += `</ul>`;\\n\\nreturn [{ json: { resumen: html } }];\\n"
+      },
+      "name": "Armar resumen",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [160, -656]
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "sendTo": "example@email.com",
+        "subject": "Resumen diario de correos",
+        "message": "={{ $json.resumen }}",
+        "options": {}
+      },
+      "name": "Enviar el resumen de los mensajes a tu correo",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [1056, -368]
+    },
+    {
+      "parameters": {
+        "content": "Trigger de programación\\nEjecuta el workflow todos los días a las 20:00 y procesa los correos de las últimas 24 horas.",
+        "height": 170
+      },
+      "name": "Sticky - Trigger",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-496, -704]
+    },
+    {
+      "parameters": {
+        "content": "Entrada de datos\\nLectura de emails\\nSe obtienen los correos recibidos en las últimas 24 horas desde Gmail.",
+        "color": 3
+      },
+      "name": "Sticky - Entrada",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-288, 48]
+    },
+    {
+      "parameters": {
+        "content": "Procesamiento\\nSe extraen y formatean remitente y asunto para el resumen (HTML básico).",
+        "height": 190
+      },
+      "name": "Sticky - Procesamiento",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [208, -512]
+    },
+    {
+      "parameters": {
+        "content": "Salida / Notificación\\nSe envía por email el resumen diario generado.",
+        "color": 6
+      },
+      "name": "Sticky - Salida",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [896, -576]
+    }
+  ],
+  "connections": {
+    "Cada día a las 20:00": {
+      "main": [
+        [
+          {
+            "node": "Leer mails Gmail (24h)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer mails Gmail (24h)": {
+      "main": [
+        [
+          {
+            "node": "Armar resumen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Armar resumen": {
+      "main": [
+        [
+          {
+            "node": "Enviar el resumen de los mensajes a tu correo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false
+}
