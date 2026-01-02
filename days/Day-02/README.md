@@ -1,18 +1,36 @@
-# 30 Days of n8n – Real Automation Use Cases
+# Day 02 – Daily Calendar Events Reminder
 
-This repository documents a personal challenge:
-**30 days, 30 real-world automations built with n8n.**
-
-The goal is simple:
-identify small, everyday tasks that are still done manually  
-and replace them with practical, reusable automations.
-
-This is **not a course** and **not a tutorial series**.
-It’s an open, hands-on process focused on real use cases.
+## Goal
+Receive an automatic email every day with the events scheduled for **tomorrow**.
 
 ---
 
-## 📁 Repository structure
+## What this automation does
+- Runs daily at a scheduled time
+- Fetches tomorrow’s events from Google Calendar
+- Formats them into a simple, readable list
+- Sends the summary via email using Gmail
 
-Each folder inside `/days` represents one day of the challenge.
+---
 
+## Why this matters
+A small but common friction:
+checking the calendar multiple times or forgetting meetings.
+
+This automation removes that step and starts the day with clarity.
+
+---
+
+## Services used
+- n8n
+- Google Calendar
+- Gmail
+
+---
+
+## Setup
+1. Import the `workflow.json` into n8n
+2. Connect your Google Calendar credentials
+3. Connect your Gmail credentials
+4. Adjust the schedule time if needed
+5. Activate the workflow
