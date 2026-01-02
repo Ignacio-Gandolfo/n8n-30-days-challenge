@@ -1,0 +1,110 @@
+{
+  "name": "Daily Calendar Events Email Reminder",
+  "nodes": [
+    {
+      "id": "daily-trigger",
+      "name": "Daily Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [-600, -200],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 19
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "get-tomorrow-events",
+      "name": "Get Tomorrow Events",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [-350, -200],
+      "parameters": {
+        "operation": "getAll",
+        "calendar": "primary",
+        "returnAll": true,
+        "timeMin": "={{ $now.plus({ days: 1 }).startOf('day').toISO() }}",
+        "timeMax": "={{ $now.plus({ days: 1 }).endOf('day').toISO() }}",
+        "options": {
+          "singleEvents": true,
+          "orderBy": "startTime"
+        }
+      },
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "id": "format-events",
+      "name": "Format Tomorrow Events",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-100, -200],
+      "parameters": {
+        "jsCode": "if (items.length === 0) {\n  return [{\n    json: {\n      message: \"📅 Mañana no tenés eventos programados.\"\n    }\n  }];\n}\n\nlet message = \"📅 Tus eventos de mañana:\\n\\n\";\n\nfor (const item of items) {\n  const event = item.json;\n  const start = new Date(event.start.dateTime || event.start.date);\n  const time = start.toLocaleTimeString('es-ES', {\n    hour: '2-digit',\n    minute: '2-digit'\n  });\n\n  message += `• ${time} – ${event.summary || \"Evento sin título\"}\\n`;\n}\n\nreturn [{\n  json: {\n    message\n  }\n}];"
+      }
+    },
+    {
+      "id": "send-email",
+      "name": "Send Email Reminder",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [150, -200],
+      "parameters": {
+        "sendTo": "your@email.com",
+        "subject": "📅 Agenda de mañana",
+        "message": "={{ $json.message }}"
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Daily Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Tomorrow Events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Tomorrow Events": {
+      "main": [
+        [
+          {
+            "node": "Format Tomorrow Events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Tomorrow Events": {
+      "main": [
+        [
+          {
+            "node": "Send Email Reminder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
