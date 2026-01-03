@@ -1,16 +1,16 @@
 # Asistente de IA para responder emails – n8n
 
-Workflow desarrollado en n8n que genera borradores de respuesta a emails utilizando inteligencia artificial.
+Workflow desarrollado en n8n que genera Emails de respuesta utilizando inteligencia artificial.
 
 ## Qué hace
 - Detecta nuevos emails en Gmail
 - Analiza el contenido del mensaje
 - Genera una respuesta profesional con IA
-- Devuelve la respuesta como borrador (no se envía automáticamente)
+- Devuelve la respuesta y la envia automaticamente.
 
 ## Por qué es útil
 Responder emails consume tiempo y energía.
-Este workflow automatiza el primer borrador, manteniendo siempre control humano.
+Este workflow automatiza el envio de mensaje, manteniendo siempre control humano.
 
 ## Tecnologías usadas
 - n8n
