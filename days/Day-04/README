@@ -1,0 +1,110 @@
+# Día 04 – Automatización de Posts en LinkedIn con Aprobación Humana (n8n)
+
+## 🎯 Objetivo
+
+Automatizar la creación y publicación de posts en LinkedIn utilizando IA, incorporando un **paso obligatorio de aprobación humana** antes de que el contenido se publique.
+
+La idea es reducir la fricción en la creación de contenido sin perder control sobre lo que finalmente se publica.
+
+---
+
+## ⚙️ Qué hace esta automatización
+
+1. **Disparador programado**
+   - Ejecuta el workflow automáticamente en el horario definido.
+
+2. **Lectura de posts pendientes desde Google Sheets**
+   - Obtiene la siguiente fila con estado `Pending`.
+   - La hoja funciona como backlog de contenidos.
+
+3. **Generación del post con IA**
+   - Genera un post en español a partir de:
+     - Descripción del post
+     - Instrucciones personalizadas
+   - Redacción en primera persona, tono profesional y no corporativo.
+
+4. **Aprobación humana por email**
+   - Envía el post generado por Gmail.
+   - Opciones:
+     - ✅ Aprobar
+     - ✏️ Solicitar cambios
+     - ❌ Cancelar
+
+5. **Regeneración opcional**
+   - Si hay feedback, el post se regenera incorporando los cambios solicitados.
+
+6. **Publicación condicional**
+   - Con imagen si existe `Image_URL`
+   - Sin imagen si no se proporciona
+
+7. **Actualización de estado**
+   - Marca el post como `Completed` o `Cancelled` en Google Sheets.
+
+---
+
+## 🧠 Por qué es útil
+
+Muchas automatizaciones de contenido fallan por eliminar el control humano.
+
+Este workflow mantiene a la IA como asistente:
+- Ahorra tiempo
+- Reduce tareas repetitivas
+- Evita publicaciones incorrectas o fuera de contexto
+
+Es un patrón reutilizable para otros flujos de contenido.
+
+---
+
+## 🛠️ Servicios utilizados
+
+- n8n
+- OpenAI
+- Google Sheets
+- Gmail
+- LinkedIn
+
+---
+
+## 📄 Estructura de Google Sheets
+
+Columnas requeridas:
+
+- `ID`
+- `Post_Description`
+- `Instructions`
+- `Image_URL` *(opcional)*
+- `Status` (`Pending`, `Completed`, `Cancelled`)
+
+El workflow procesa únicamente filas con `Status = Pending`.
+
+---
+
+## 🚀 Configuración
+
+1. Importar `workflow.json` en n8n
+2. Configurar credenciales:
+   - OpenAI
+   - Google Sheets
+   - Gmail
+   - LinkedIn
+3. Ajustar el horario del trigger
+4. Definir el email del aprobador
+5. Activar el workflow
+
+---
+
+## ⚠️ Notas
+
+- Workflow en versión base, sin filtros avanzados.
+- Pensado para aprender y extender progresivamente.
+- No incluye validaciones automáticas ni moderación.
+
+---
+
+## 📌 Parte del desafío
+
+Este proyecto forma parte del desafío personal:
+
+**30 días usando n8n para resolver problemas reales con automatizaciones simples.**
+
+Cada día explora un caso práctico y reutilizable.
