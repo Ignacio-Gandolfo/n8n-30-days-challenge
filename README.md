@@ -1,6 +1,6 @@
-# n8n – Desafío de 30 días
+# n8n – Challenge
 
-Repositorio del desafío de 30 días creando automatizaciones prácticas con **n8n**.
+
 
 La idea es construir y documentar un workflow por día, enfocado en
 procesos reales y casos de uso concretos.
